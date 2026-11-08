@@ -78,8 +78,7 @@ header {
     position: sticky;
     top: 0;
     z-index: 30;
-    background: color-mix(in srgb, var(--bg) 88%, transparent);
-    backdrop-filter: blur(8px);
+    background: rgba(255,255,255,.96);
     border-bottom: 1px solid var(--line)
 }
 
@@ -198,16 +197,6 @@ select:focus-visible {
     color: var(--mute)
 }
 
-header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05)
-}
-
 /* Hero: a tall stage with a pinned full-screen video. Scrolling plays the video. */
 .stage {
   position: relative;
@@ -235,7 +224,9 @@ header {
   object-position: 60% 50%;
   z-index: 0;
   background: #e9eaea;
-  pointer-events: none
+  pointer-events: none;
+  transform: translateZ(0);
+  will-change: contents
 }
 
 /* soft wash so the headline stays readable over the necklace on small screens */

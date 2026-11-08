@@ -153,13 +153,15 @@ function hero() {
 
   // The hero video is scrubbed by scroll: top of page = first frame (hand holding the
   // necklace), scrolling down plays the pour. Pearls stay on the table at the end.
-  let dur = 0, target = 0, shown = 0, raf = 0;
-  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
+  let dur = 0, target = 0, raf = 0;
+  
   function progress() {
     const span = stage.offsetHeight - innerHeight;
     return span > 0 ? Math.min(1, Math.max(0, scrollY / span)) : 0;
   }
+
+  let seeking = false;
+  vid.addEventListener('seeked', function() { seeking = false; if (Math.abs(vid.currentTime - target) > 0.02 && !raf) raf = requestAnimationFrame(frame); });
 
   function frame() {
     raf = 0;
@@ -173,19 +175,22 @@ function hero() {
     }
     if (!dur) return;
     target = p * dur;
-    // Ease toward the target so scrubbing feels smooth rather than steppy
-    shown = still ? target : shown + (target - shown) * 0.18;
-    if (Math.abs(target - shown) < 0.005) shown = target;
-    if (Math.abs(vid.currentTime - shown) > 0.01) vid.currentTime = shown;
-    if (shown !== target) raf = requestAnimationFrame(frame);
+    // Snap to the frame grid (24fps) so we never ask for a time between frames
+    target = Math.round(target * 24) / 24;
+    // Never queue a new seek while the last one is still decoding - this was the main source of lag
+    if (seeking) return;
+    if (Math.abs(vid.currentTime - target) > 0.01) {
+      seeking = true;
+      vid.currentTime = target;
+    }
   }
 
   const on = function() { if (!raf) raf = requestAnimationFrame(frame); };
 
   function ready() {
     dur = vid.duration || 0;
-    shown = target = progress() * dur;
-    vid.currentTime = shown;
+    target = progress() * dur;
+    vid.currentTime = target;
     frame();
   }
 

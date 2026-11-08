@@ -61,7 +61,7 @@ npx serve .
   - Scrolling down plays the video forward: the necklace slips from the hand and the pearls scatter across the table. Scrolling back up rewinds it.
   - The pearls stay on the table at the end. There is no thread-snap effect and no fading.
   - To change the video, replace `video/hero.mp4`. Re-encode with frequent keyframes so scrubbing stays smooth:
-    `ffmpeg -i in.mp4 -an -c:v libx264 -crf 24 -g 4 -pix_fmt yuv420p -movflags +faststart video/hero.mp4`
+    `ffmpeg -i in.mp4 -an -c:v libx264 -crf 24 -g 1 -pix_fmt yuv420p -movflags +faststart video/hero.mp4`
 - **Shop & Catalog**: Browse necklaces, bracelets, earrings, and bridal sets with category filtering and price sorting.
 - **Cart & Checkout**: Real-time calculations with coupon code discounts (try code `PEARL10` or `WELCOME200`), tax, and shipping calculation.
 - **Admin Dashboard**: Manage inventory, add/edit products, track orders, customers, and discount coupons (accessible via the `#admin` route or the menu drawer).
